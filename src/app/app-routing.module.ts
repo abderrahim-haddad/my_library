@@ -1,17 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SignupComponent } from './auth/signup/signup.component';
 import { SigninComponent } from './auth/signin/signin.component';
-import { BookListComponent } from './book-list/book-list.component';
+import { SignupComponent } from './auth/signup/signup.component';
 import { BookFormComponent } from './book-list/book-form/book-form.component';
+import { BookListComponent } from './book-list/book-list.component';
 import { SinleBookComponent } from './book-list/sinle-book/sinle-book.component';
+import { AuthGuard } from './services/auth-guard.service';
 
 const routes: Routes = [
   { path: 'auth/signup', component: SignupComponent },
   { path: 'auth/signin', component: SigninComponent },
-  { path: 'books', component: BookListComponent },
-  { path: 'books/new', component: BookFormComponent },
-  { path: 'books/view/:id', component: SinleBookComponent },
+  { path: 'books', canActivate: [AuthGuard], component: BookListComponent },
+  { path: 'books/new', canActivate: [AuthGuard], component: BookFormComponent },
+  { path: 'books/view/:id', canActivate: [AuthGuard], component: SinleBookComponent },
+  { path: '', redirectTo: 'books', pathMatch: 'full' },
+  { path: '**', redirectTo: 'books' }
 ];
 
 @NgModule({
