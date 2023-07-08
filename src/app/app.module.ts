@@ -1,16 +1,16 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SignupComponent } from './auth/signup/signup.component';
 import { SigninComponent } from './auth/signin/signin.component';
-import { BookListComponent } from './book-list/book-list.component';
+import { SignupComponent } from './auth/signup/signup.component';
 import { BookFormComponent } from './book-list/book-form/book-form.component';
-import { SinleBookComponent } from './book-list/sinle-book/sinle-book.component';
+import { BookListComponent } from './book-list/book-list.component';
+import { SingleBookComponent } from './book-list/single-book/single-book.component';
 import { HeaderComponent } from './header/header.component';
 
 @NgModule({
@@ -20,8 +20,8 @@ import { HeaderComponent } from './header/header.component';
     SigninComponent,
     BookListComponent,
     BookFormComponent,
-    SinleBookComponent,
     HeaderComponent,
+    SingleBookComponent,
   ],
   imports: [
     BrowserModule,

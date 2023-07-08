@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Book } from '../models/book.model';
 import { Subject } from 'rxjs';
 import firebase from 'firebase/compat/app';
+import 'firebase/compat/database';
+import 'firebase/compat/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +32,7 @@ export class BooksService {
   }
 
   getSinglebook(id: number) {
-    return new Promise(
+    return new Promise<Book>(
       (resolve, reject) => {
         firebase.database().ref('/books/' + id).once('value').then(
           (data) => {
@@ -51,6 +53,17 @@ export class BooksService {
   }
 
   removeBook(book: Book) {
+    if (book.photo) {
+      const storageRef = firebase.storage().refFromURL(book.photo);
+      storageRef.delete().then(
+        () => {
+          console.log('picture removed!');
+        },
+        (error) => {
+          console.log("error " + error);
+        }
+      )
+    }
     const bookIndexToRemove = this.books.findIndex(
       (book1) => {
         if (book1 == book) {
@@ -62,6 +75,26 @@ export class BooksService {
     this.books.splice(bookIndexToRemove, 1);
     this.saveBooks();
     this.emitBooks();
+  }
+
+  uplaodFile(file: File) {
+    return new Promise<string>(
+      (resolve, reject) => {
+        const uniqueFileName = Date.now().toString();
+        const upload = firebase.storage().ref().child('images/' + uniqueFileName + file.name).put(file);
+        upload.on(firebase.storage.TaskEvent.STATE_CHANGED,
+          () => {
+            console.log('loading...');
+          },
+          (error) => {
+            console.log('loading error ' + error);
+            reject();
+          },
+          () => {
+            resolve(upload.snapshot.ref.getDownloadURL());
+          })
+      }
+    )
   }
 
 
